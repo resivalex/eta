@@ -9,7 +9,7 @@ bundle install
 
 ```
 rabbitmq-server
-ruby eta_server.rb
+ruby service.rb
 ruby api.rb
 ```
 

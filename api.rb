@@ -1,18 +1,24 @@
 require './eta_client.rb'
+require 'json'
 require 'sinatra'
 
 get '/eta' do
-  conn = Bunny.new(automatically_recover: false)
-  conn.start
+  content_type :json
 
-  ch   = conn.create_channel
+  connection = Bunny.new(automatically_recover: false)
+  connection.start
 
-  client   = EtaClient.new(ch, 'rpc_queue')
-  puts ' [x] Requesting eta'
+  channel = connection.create_channel
+
+  client = EtaClient.new(channel, 'rpc_queue')
   response = client.call(params[:coord])
 
-  ch.close
-  conn.close
+  channel.close
+  connection.close
 
-  response
+  begin
+    { eta: Float(response) }.to_json
+  rescue
+    { error: response }.to_json
+  end
 end

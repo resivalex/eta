@@ -25,7 +25,7 @@ class EtaServer
     raise ArgumentError unless (0.0..180.0).cover?(longitude)
 
     @car_park.eta(latitude, longitude).to_s
-  # rescue
-  #   'Wrong format'
+  rescue
+    'Wrong format'
   end
 end

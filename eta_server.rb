@@ -21,7 +21,6 @@ class EtaServer
   def process(request)
     latitude, longitude = request.split(' ').map { |s| Float(s) }
 
-    puts request.inspect
     raise ArgumentError unless (-90.0..90.0).cover?(latitude)
     raise ArgumentError unless (0.0..180.0).cover?(longitude)
 

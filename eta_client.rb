@@ -1,13 +1,8 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-require "bunny"
-require "thread"
-
-conn = Bunny.new(:automatically_recover => false)
-conn.start
-
-ch   = conn.create_channel
+require 'bunny'
+require 'thread'
 
 class EtaClient
   attr_reader :reply_queue
@@ -19,7 +14,7 @@ class EtaClient
     @x              = ch.default_exchange
 
     @server_queue   = server_queue
-    @reply_queue    = ch.queue("", :exclusive => true)
+    @reply_queue    = ch.queue('', exclusive: true)
 
     @lock      = Mutex.new
     @condition = ConditionVariable.new
@@ -33,13 +28,13 @@ class EtaClient
     end
   end
 
-  def call(n)
-    self.call_id = self.generate_uuid
+  def call(request)
+    self.call_id = request.hash.to_s
 
-    @x.publish(n.to_s,
-      :routing_key    => @server_queue,
-      :correlation_id => call_id,
-      :reply_to       => @reply_queue.name)
+    @x.publish(request,
+      routing_key:      @server_queue,
+      correlation_id:   call_id,
+      reply_to:         @reply_queue.name)
 
     lock.synchronize{condition.wait(lock)}
     response
@@ -53,11 +48,3 @@ class EtaClient
     "#{rand}#{rand}#{rand}"
   end
 end
-
-client   = EtaClient.new(ch, "rpc_queue")
-puts " [x] Requesting eta"
-response = client.call('46.055556 14.508333')
-puts " [.] Got #{response}"
-
-ch.close
-conn.close

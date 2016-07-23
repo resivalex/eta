@@ -15,5 +15,5 @@ ruby api.rb
 
 # Using
 
-request `http://localhost:4567/eta?lat=46.055556&lon=14.508333`
+request `http://localhost:4567/eta?lat=46.055556&long=14.508333`
 response `{"eta":86.78814385160678}`

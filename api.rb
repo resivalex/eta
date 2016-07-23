@@ -11,7 +11,7 @@ get '/eta' do
   channel = connection.create_channel
 
   client = EtaClient.new(channel, 'rpc_queue')
-  response = client.call("#{params[:lat]} #{params[:lon]}")
+  response = client.call("#{params[:lat]} #{params[:long]}")
 
   channel.close
   connection.close

@@ -1,6 +1,3 @@
-#!/usr/bin/env ruby
-# encoding: utf-8
-
 require 'bunny'
 require 'thread'
 
@@ -38,13 +35,5 @@ class EtaClient
 
     lock.synchronize{condition.wait(lock)}
     response
-  end
-
-  protected
-
-  def generate_uuid
-    # very naive but good enough for code
-    # examples
-    "#{rand}#{rand}#{rand}"
   end
 end

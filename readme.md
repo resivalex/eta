@@ -1,7 +1,7 @@
 # Requirements
 
 ```
-brew install rabbitmq
+brew install rabbitmq # `export PATH=$PATH:/usr/local/sbin` in .profile
 bundle install
 ```
 
